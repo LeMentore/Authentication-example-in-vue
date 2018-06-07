@@ -8,7 +8,7 @@ import store from './store'
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'https://auth-vue-de92c.firebaseio.com/'
-axios.defaults.headers.common['Authorization'] = 'lol'
+// axios.defaults.headers.common['Authorization'] = 'lol'
 axios.defaults.headers.get['Accepts'] = 'application/json'
 
 const reqInterceptor = axios.interceptors.request.use(config => {

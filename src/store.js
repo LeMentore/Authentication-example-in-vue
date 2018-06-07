@@ -51,6 +51,8 @@ export default new Vuex.Store({
 
                     dispatch('storeUser', authData)
                     dispatch('setLogoutTimer', res.data.expiresIn)
+
+                    router.replace('/dashboard')
                 })
                 .catch(error => console.log(error))
         },
@@ -67,6 +69,8 @@ export default new Vuex.Store({
                 token: token,
                 userId: userId
             })
+
+            router.replace('/dashboard')
         },
         login({commit, dispatch}, authData) {
             axios.post('/verifyPassword?key=AIzaSyDDwhrnnOPxpCorueCmQqtUbzCJ6P3VugM', {
@@ -87,6 +91,8 @@ export default new Vuex.Store({
                         userId: res.data.localId
                     })
                     dispatch('setLogoutTimer', res.data.expiresIn)
+
+                    router.replace('/dashboard')
                 })
                 .catch(error => console.log(error))
         },

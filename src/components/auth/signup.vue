@@ -7,7 +7,7 @@
                     <input
                         type="email"
                         id="email"
-                        @input="$v.email.$touch()"
+                        @blur="$v.email.$touch()"
                         v-model="email">
                     <p v-if="!$v.email.email">Некорректный ящик</p>
                     <p v-if="!$v.email.required">Обяательное поле</p>

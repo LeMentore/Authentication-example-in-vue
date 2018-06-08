@@ -12,12 +12,14 @@
                     <p v-if="!$v.email.email">Некорректный ящик</p>
                     <p v-if="!$v.email.required">Обяательное поле</p>
                 </div>
-                <div class="input">
+                <div class="input" :class="{invalid: $v.age.$error}">
                     <label for="age">Возраст</label>
                     <input
                         type="number"
                         id="age"
+                        @blur="$v.age.$touch()"
                         v-model.number="age">
+                    <p v-if="!$v.age.minValue">Вам должно быть минимум {{ $v.age.$params.minValue.min }} лет</p>
                 </div>
                 <div class="input">
                     <label for="password">Пароль</label>
@@ -72,7 +74,7 @@
 </template>
 
 <script>
-    import { required, email } from 'vuelidate/lib/validators'
+    import { required, email, numeric, minValue } from 'vuelidate/lib/validators'
 
     export default {
         data() {
@@ -87,10 +89,8 @@
             }
         },
         validations: {
-            email: {
-                required,
-                email
-            }
+            email: { required, email },
+            age: { required, numeric, minValue: minValue(18) }
         },
         methods: {
             onAddHobby() {

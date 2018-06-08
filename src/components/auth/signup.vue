@@ -55,20 +55,25 @@
                         <div
                             class="input"
                             v-for="(hobbyInput, index) in hobbyInputs"
+                            :class="{invalid: $v.hobbyInputs.$each[index].$error}"
                             :key="hobbyInput.id">
                             <label :for="hobbyInput.id">Увлечение #{{ index }}</label>
                             <input
                                 type="text"
                                 :id="hobbyInput.id"
+                                @blur="$v.hobbyInputs.$each[index].value.$touch()"
                                 v-model="hobbyInput.value">
                             <button @click="onDeleteHobby(hobbyInput.id)" type="button">X</button>
                         </div>
+                        <p v-if="!$v.hobbyInputs.minLength">
+                            Добавьте хотя бы {{ $v.hobbyInputs.$params.minLength.min }} хобби
+                        </p>
+                        <p v-if="!$v.hobbyInputs.required">Добавьте хобби</p>
                     </div>
                 </div>
                 <div class="input inline" :class="{invalid: $v.terms.$invalid}">
-                    <input type="checkbox" id="terms" @click="$v.terms.$touch()" v-model="terms">
+                    <input type="checkbox" id="terms" @change="$v.terms.$touch()" v-model="terms">
                     <label for="terms">Принять Условия использования</label>
-                    {{$v.terms}}
                 </div>
                 <div class="submit">
                     <button type="submit">Submit</button>
@@ -102,6 +107,16 @@
                 required: requiredUnless(vm => {
                     return vm.country === 'germany'
                 })
+            },
+            hobbyInputs: {
+                required,
+                minLength: minLength(2),
+                $each: {
+                    value: {
+                        required,
+                        minLength: minLength(5)
+                    }
+                }
             }
         },
         methods: {

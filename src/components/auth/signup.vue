@@ -21,19 +21,23 @@
                         v-model.number="age">
                     <p v-if="!$v.age.minValue">Вам должно быть минимум {{ $v.age.$params.minValue.min }} лет</p>
                 </div>
-                <div class="input">
+                <div class="input" :class="{invalid: $v.password.$error}">
                     <label for="password">Пароль</label>
                     <input
                         type="password"
                         id="password"
+                        @blur="$v.password.$touch()"
                         v-model="password">
+                    <p v-if="!$v.password.minLength">Слишком короткий</p>
                 </div>
-                <div class="input">
+                <div class="input" :class="{invalid: $v.confirmPassword.$error}">
                     <label for="confirm-password">Еще раз пароль</label>
                     <input
                         type="password"
                         id="confirm-password"
+                        @blur="$v.confirmPassword.$touch()"
                         v-model="confirmPassword">
+                    <p v-if="!$v.confirmPassword.sameAs">Слишком короткий</p>
                 </div>
                 <div class="input">
                     <label for="country">Страна</label>
@@ -74,7 +78,7 @@
 </template>
 
 <script>
-    import { required, email, numeric, minValue } from 'vuelidate/lib/validators'
+    import { required, email, numeric, minValue, minLength, sameAs } from 'vuelidate/lib/validators'
 
     export default {
         data() {
@@ -90,7 +94,9 @@
         },
         validations: {
             email: { required, email },
-            age: { required, numeric, minValue: minValue(18) }
+            age: { required, numeric, minValue: minValue(18) },
+            password: { required, minLength: minLength(6) },
+            confirmPassword: { sameAs: sameAs('password') }
         },
         methods: {
             onAddHobby() {
